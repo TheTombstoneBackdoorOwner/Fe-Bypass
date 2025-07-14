@@ -13,6 +13,8 @@ frame.Size = UDim2.new(0, 500, 0, 300)
 frame.Position = UDim2.new(0.5, -250, 0.5, -150)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
 
 local editor = Instance.new("TextBox", frame)
 editor.Size = UDim2.new(1, -20, 1, -80)
