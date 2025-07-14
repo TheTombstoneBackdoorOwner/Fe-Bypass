@@ -71,15 +71,44 @@ executeBtn.MouseButton1Click:Connect(function()
 
     status.Parent = frame
 
-    -- 🔻🔻🔻 PLACEHOLDER FOR EXECUTION LOGIC 🔻🔻🔻
     local code = editor.Text
 
-    -- Insert safe RemoteEvent or feature triggering logic here, e.g.:
-    -- remote:FireServer(code)
+        if currentRemoteEvent then
+        local ok, err = pcall(function()
+            currentRemoteEvent:FireServer(code)
+        end)
+        if ok then
+            StatusText.Text = "Executed"
+            success = true
+        else
+            StatusText.Text = "Bypass error: "..tostring(err)
+        end
+    end
 
-    -- (Currently does nothing)
-    print("Execution placeholder: " .. code)
-    -- 🔺🔺🔺 END PLACEHOLDER 🔺🔺🔺
+    if currentRemoteFunction then
+        local ok, result = pcall(function()
+            return currentRemoteFunction:InvokeServer(code)
+        end)
+        if ok then
+            StatusText.Text = tostring(result or "Executed)
+            success = true
+        else
+            StatusText.Text = "RemoteFunction error: "..tostring(result)
+        end
+    end
+
+    if not success then
+        StatusText.Text = "No valid remote found"
+    end
+
+    wait(2)
+    StatusText:Destroy()
+end)
+
+ClearBtn.MouseButton1Click:Connect(function()
+    Editor.Text = ""
+end)
+
 
     task.wait(2)
     status:Destroy()
