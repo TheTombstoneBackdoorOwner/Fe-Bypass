@@ -111,7 +111,7 @@ executeBtn.MouseButton1Click:Connect(function()
 
     if currentRemoteEvent then
         local ok, err = pcall(function()
-            currentRemoteEvent:FireServer(SS)
+            currentRemoteEvent:FireServer(player,SS)
         end)
         if ok then
             status.Text = "Fe Bypass Ran"
@@ -123,7 +123,7 @@ executeBtn.MouseButton1Click:Connect(function()
 
     if currentRemoteFunction then
         local ok, result = pcall(function()
-            return currentRemoteFunction:InvokeServer(SS)
+            return currentRemoteFunction:InvokeServer(player,SS)
         end)
         if ok then
             status.Text = tostring(result or "Fe Bypass Executed")
