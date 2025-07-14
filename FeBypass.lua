@@ -16,9 +16,24 @@ frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
 
+local topBar = Instance.new("Frame", frame)
+topBar.Size = UDim2.new(1, 0, 0, 40)
+topBar.Position = UDim2.new(0, 0, 0, 0)
+topBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+topBar.BorderSizePixel = 0
+
+local title = Instance.new("TextLabel", topBar)
+title.Size = UDim2.new(1, 0, 1, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Fe Bypass (Private Gui)"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 16
+
 local editor = Instance.new("TextBox", frame)
-editor.Size = UDim2.new(1, -20, 1, -80)
-editor.Position = UDim2.new(0, 10, 0, 10)
+editor.Size = UDim2.new(1, -20, 1, -120)
+editor.Position = UDim2.new(0, 10, 0, 50)
 editor.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 editor.TextColor3 = Color3.fromRGB(255, 255, 255)
 editor.ClearTextOnFocus = false
@@ -49,20 +64,25 @@ clearBtn.Font = Enum.Font.GothamBold
 clearBtn.TextSize = 16
 clearBtn.BorderSizePixel = 0
 
-local currentRemoteEvent = ReplicatedStorage:FindFirstChild("RemoteEvent")
-if currentRemoteEvent and not currentRemoteEvent:IsA("RemoteEvent") then
-    currentRemoteEvent = nil
+local currentRemoteEvent = nil
+local currentRemoteFunction = nil
+
+local function scanForRemotes()
+    for _, obj in ipairs(ReplicatedStorage:GetChildren()) do
+        if obj:IsA("RemoteEvent") and obj.Name == "RemoteEvent" then
+            currentRemoteEvent = obj
+        elseif obj:IsA("RemoteFunction") and obj.Name == "RemoteExecutor" then
+            currentRemoteFunction = obj
+        end
+    end
 end
 
-local currentRemoteFunction = ReplicatedStorage:FindFirstChild("RemoteExecutor")
-if currentRemoteFunction and not currentRemoteFunction:IsA("RemoteFunction") then
-    currentRemoteFunction = nil
-end
+scanForRemotes()
 
 ReplicatedStorage.ChildAdded:Connect(function(child)
-    if child.Name == "RemoteEvent" and child:IsA("RemoteEvent") then
+    if child:IsA("RemoteEvent") and child.Name == "RemoteEvent" then
         currentRemoteEvent = child
-    elseif child.Name == "RemoteExecutor" and child:IsA("RemoteFunction") then
+    elseif child:IsA("RemoteFunction") and child.Name == "RemoteExecutor" then
         currentRemoteFunction = child
     end
 end)
